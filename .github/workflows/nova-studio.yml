@@ -1,0 +1,191 @@
+# NOVA Studio v0.2: FULL GDevelop editor + mobile Construct-inspired UI.
+# Single-file installer for GitHub.com on Android (no local computer).
+# Source of embedded UI is distributed separately in the ZIP for inspection.
+name: NOVA Studio — Android editor build and Pages
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/nova-studio.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: nova-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - name: Checkout full GDevelop fork
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Embed NOVA mobile UI in the native GDevelop editor
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          PAYLOAD = [
+              ("nova-mobile.css",
+               "eNrFWemO4zYS/t9PwcQYoHti9ej0iQUySIJFfuwGyLFYIAgCSqRsbsuiQlG2O8EA+xD7hPskKR6Sqat75lcwwMASxWIdX31VxX73"
+               "Fv3zu3+9Rz/IhjC+QyeesoKin75FOReoxJKdKfr71/RMC149ou8EO7ASFyjjhC7RP7798RG9fXe3E5xL9McdQp5X8jP2WPm0QwuK"
+               "8yjP97fXp0ZSAgvbNc6yxFkoWEnhfeTHUbJ13qdFo99v07QnqG5EjjO1FMQBDVNnqcIlLdQCDjcRyPpwtzBbtIVew9AfiLC6KvDz"
+               "DpW8pHv04e7LEyUMo/sTvnoXRuRxh7a+X10ftFFHeSqWKOXkGfbyMxV1JnhReCk94jPj4iYHoYVxBXx99Wr2OysPO/gtCBUevEKf"
+               "sVPFhcSl3KMjZYej3KHA99/0Fk6s9NpF310B+QhVmBAQ60le7VCGi+w+jqsr+gLR8nxf45x6WFAVgppK9dESKUMeZuWkXEp+sqKS"
+               "aFaU+W5CmrF75OSK10wyXu5Qzq6U7JEWAxbtb/5PC5497dHvcASh1x0Kg3gdbyLf942OOS+Vg8Lq+i54jBNUP9eSnkD+Enm4qgrq"
+               "mTdL9D0H/fgSvRcMQ7BqXNZeTQXLjaCMFypOZyzubxB92IOSrJQQGwB4KeteIAcGvV2OX+12KYU8oZNLOAfBs0iYPiRtwMclbLL6"
+               "svIINoCLjSO6R8mb7OjhzPj3hEtWNQVWT3uUNaJWe61pLx20y3nW1N6Z1SyFrAdwN9KkIngc1bxgxHWZykbwmf3I43muAwrfmkMe"
+               "9VdHikkv/DgFSZD5Su1Kx7+guQGCsCB3IBCNg4IbyU0Y26z4GNhrnO5bmO9e/A5tQJTFXAfOvKBgGC7YofQYgAw0yahx6QGDIStl"
+               "d4qzp4PgTQm8pryChXcQmDD48D4IfEIPy0UQBFmIl4swjsJ4+2CO6aBgsi/oHL6I1om/2u4NcI6Y8IuiARURpeUCkiN2/Z0KXCqH"
+               "K9aw3AX+VMqD1D26HEF3r640XZb8InC1H9qozYmrobUprqmyaXxaLQUvDzecjkGiAKtgD4cGiZJcUKliqhTR4XiM+rCxgoG+Qay7"
+               "W3+nX1xs9ME/EztPuCj6W7dq51hDXYVuyPAMGgfq1L81gBOQZ10aafe0+DNPxsc+/DPPJqT9WBIdSxNxByqLMIyA69o9noJMAy7f"
+               "KDlddA6CAW/C74wOEeh6CIA44mPXip0iirMypqcCVNvNauV+fhCUOuyzIJs8z5Oe7J6EIFqnq6Azot0Wpni96Qk2KJ9hhTYFXiWG"
+               "MQW8Xq6GLKDSSG16ZYstkVNENEye/zS1ZPkzWA/fKpbWuQZylZMGGQV5Q2V2nMBDEAYkxJ0rNVMGUySsEvLB9a3EqYJ9m+99Gmgh"
+               "aeqae6KErAFNBVVR7ZtkSi/88ggT1BYZCG5zKmf4cOSDHlEGt+TogL6urrcS3wLZHwC5BVRKiE+jGYyD/TMAhwaQJqv9HEnNy4Ou"
+               "4pTyAZsE2zER+Qqzqha2qAwHxZCSA32pGEarN/uWYlYuw2w0E3DFlhLi8hhvxqAZ1ptFDJmX58sFXq/XefAwcvp2rJxmP9Cwy7wP"
+               "7qJOQ1i9paOT06AJEbx6ybyPr9O2Jn5SK2pz27xjpelcHND7E3kG1XPr+BW+1t0PK/TjkRFCy5m2UAvTaWONtVLQY7Cql44c/cJ1"
+               "lZ5J/nI/WZgBQdyHW6jJy01yvrzIdK7nnOzR5qhGEEahvOAX79nt0cZVcMxe/dYGmpvYdjabsZf1b+iyT+DWTY0oNCUjDp4jq0EI"
+               "RmDvZNtjoIem/773Aj95M84eHwVKTf2fP5Y9zpVp6dPCjVR7xmTP/jPBEntE4AsVf/tcmfD5LyPjlq/t09oNNraaT+vrP3yqOi0z"
+               "fKIyDqF0+Rn089NOKjMjwigkdhRpOTVe97qrG3QMCM3yVH3TmJyp8ymVF6o5o20xfD2w7l/q8NMkXKVTXeEqWsdZv7sLJ7vnuE/l"
+               "jr3dDHmjwUHfF0Pf589X5Lbj9Xsdr99VP6vXuq/BE8ue9Lx7wuLASqM4CpTVq+FWf7Kldwf1xTZNo2w7Njzon6pwZ+dgoGDzTqNq"
+               "+JJXtFSlvXavf0x/rXsUPaM4IVSj1sBChQl392vz4XZuJkhivAqnoh9BaLb9+59YG2xDom6KJkcGQ5r0CmYrdXaa4Rx7lDUGSANk"
+               "zfRAypz5qWGVkOHHt47JqhpqvV2VWt+0EU7yDJqVFzGVHelZaCwbUNlRzSR7h5QwTUjyohxzj2k7Zde7Zm5rJWU59fNgxiVHIJzJ"
+               "gbcdJ93ztfFtIqyt8x1qt50mx7V8ZSjSJX4VfFyJ1zAwPkoUUqYI/d6DpaUeyp2eAF9bXtsj5xJ0szlfereFtkk3Q/mwhPnDCxGY"
+               "BOMw2U5mQbJaRxvST/p8iIdwDkROAzfZv5h5Z66NSIAWbs1bUo+CYqfnI78MitG8R9sy+e4tep/JBhfdtTn6RimFfjhSKtH///s/"
+               "VDepLOgSfQX8JEWTSWiLnqhtWhS/SFZq9tKX66DYgVjDQCUl5FHU8tdfS07oVyZotwxpcXO7zpjeLPjF7q27UtFFMp7fDCgh2qN1"
+               "y7AaOBj6OjEjaHA7EKcrfx1+hPy+3FvDqIGvh3hVtRfJJt1SMidvWsl5YeuUbLI5YSfoeL0jLom+LHUm7cQ4bPIPCdG6+0PC1H3V"
+               "6G8Roxso3dymuGbg0Ch0ykEUDo+tBM2pqD1BSZNR4p24Ab95NkoMr4KdBmI5s9g1dDPrLZG5+daa8+HuT5aHtJ4="
+               ,"a4c07057af40d14626a979d32a02ba8c44a8a834a08a7fda797d493f9283f205"),
+              ("nova-mobile.js",
+               "eNrNW21v3MYR/u5fsVaC8M65FyVp0FZvRmIbrQE7LmolaaAqDu+4umPMIy8kT7IaCXDs1kVqIy6c+AVu3twW/ZIvimPFsp3IH/oH"
+               "eH9Bv6Qzsy/cpag7WUGAAkF0XM7Ozjw7MzszXDePsDfOvPUaO5sOPD9ivajlB5z5YcrjJbfN2VIUs98c58s8iPps5+JnLIr9jh+6"
+               "ATt9cr4e+G0eJtxj7cjjjUPsCJvv+gmD/9yQ8bDrhm3e42HKoiWWdjlz2+kApmqG3PPTKK6xMEqZy2LeD1w5IR6Eqd8jns1DlaVB"
+               "2E79KGSVKvvwEGPOIOEsSWO/nTrT8OwvscqKH3rRSuPcOdTn3Nn5N4+fPHPuzZPnzlWBcTqIQyTck4jNsjQe8OlDQNSOwiRVUMyq"
+               "OT03bXdPg8Ruxan03Av1Fd9Lu1Ps15OT/QtVpzqtZ6Zu6ywPeBtUg+nOgu+9OzsBg/WJxRpbiKOA0+PEopPPCdwWDxIgR/UY68fR"
+               "+8BgijnZV8OL2Xa2mT0eXnJqLAHAOQ7fG16BwR+zDRgENMM0oVEg/XZ4dXgp2xped2rEK2ohK3r9Jbz8m+A1vAoTYZk+j1Ofy8n3"
+               "Yfqj4Ucw/T4x7sd82ecr+PJ2tpE9HV4efpQ9lnxdzzuBC+PbL2AiTt5kQKBFyDaBB5CdHbQ05Vfw+kGRiPgl7jKXOgz/AkpvgHZb"
+               "IOg1YNKNevTu0+wJjN9HvUE/mLaeQ+jjnxIEd2792wBu59Z/TMR2Pr4HjzlEO7e/keJY2OzceWjBsXPre6Ga0uvFHBRD250r3+HS"
+               "QrGdK5/mmuxcu6TFDzjYexSl6neHJ2CvaHrhIAjUaBq5SToPPhHrF1p1nrTdPp/nF1J4t+wGA5g8Bz4d+2GnIp7X1pjjVBvSxyrN"
+               "PyYvNjs15jAYBLpexTDgMIp7buD/CRzbYJcvIljCvOhU1HYDfipa4fExN+EmEz95y0/8FrkQeAN59ewcgXT4sBp44QWmfjc8P3GB"
+               "3MNBNdbh6bHAh1+/x/2pVBsBDztpl82xSSATzBRtO4gSQK7iPBdGy249oYhWH/jomkCpY0jopv4yn3dbiYwmSuKE8xCx5SvsLE+F"
+               "LkwGD7bQaDS8qD2gpT4Y8HhV+fhrQVAxXL662FjyA4iflVxruYwIVIc1MoqiiruDqze6bqIHVdxiS26Q8GmDg9LYt7DyvUaSunGa"
+               "vO2n3YqDAcepVvXSTKwABqpXmNav5EoiBIqh9ZIFNcRmTHP2kHTP5XYttl5tJHiUVCZr7JVXiW69sGU9fmYph+tDc2cMuzTM5rUU"
+               "rLo1SHnFcWPfrVOAdRBpKUU5beqnASeyHNcw5DH5ljGYwvOxCI5JEEcyNH3ryH9vw/+eb9bI6bRyv3yZODvZjewxRbIH8HfDKVMY"
+               "bfT1QZpGYSWRlpVA3LoAMShJgCRRKOAJXVEGLE8dOG71pNwCZKxQVsnKzVkvVzVNbrfN6k2XA3IrD2kzN2SVbqunqLhWkAmj92g/"
+               "c1oESU2eouIJjlV3gTYObHHR8lrFGFwy9J7BIcstWh7vIszmQbKi3WhhvAHWRhteTfPay0I9N3XrKXih75ncDIM8ahjcZHXR4Kgi"
+               "0+sRwOeG1cb7kR9W8AwoOqe5eQkcWZV8gM4C/dRAUSq4uuKxTjautrhg11HqL61WejDX7XA7/NIBB8DiUVgwSadBIZ0oHLkMPZhq"
+               "w1TJ1yRoB26SnPLhF4YiRxwN3WhFsWkDEDEeq9EA1NBnrLmIOnQTnipCODkAheIKMe9Fy9xaBALaK5OTJSENmB2PXTg3Kytdv93V"
+               "MQ2Vxy2G9w2PCDAFRZLpnKCAzgLZhEuMZycCvpRiVG4ku40Q9s0NPe5BIiKzA2LNZmchUcWJ2hLGrwOFQPdgC9FMvRIl70UpwA6X"
+               "wMK64pgW8Bno0UEk8QPoDDQB/BD8aNqmT6NOJ+AFwI1ZpbDPSuDZUSa4sikxQNxtcfz2+TcoZhcPKUvSaSM6KrLdgSY/bYFrIQ1R"
+               "h6a9Pm7JsptiUlOhOgUM2PYtgBFjlpH6mPF3KRqEmOshmQiV8AstXDITTm5EPHkgA1W1WrUlNLEgviXG3456PTCPijAlJSriIkYM"
+               "S8BYYg5K29F4mBsr2U2XcqONyCfusS/mDCoZnKp1VphIN4lgDeolWYqtBe4qRIdm1Sw5DWhk9IM6DAqfx1TXPWJq+vAyy+4zqLF0"
+               "uZdtNlh2A2qlTUYFD9Zl28Prw4+xaAJiI4fYYvBnGymGl7OnwOwqFmJPgA8Ucg0V69ZL1RS10Cg9iWItL9qeTUEQYwsls0tDGN/K"
+               "Htr6buDYE1SGXtkKapyujtEHK6xR2uD7tew7VUmuUdLM+nBujNfLqj9tCUH4p6AJ/fgR92dbYED6jtsDVUkW5DZ9yUoJF5znUjjD"
+               "W25ch6l12qC6yIYcbDIsVseqco+U+CtI/wRF3h6/Y+N1UKXvAdVIBq0DqXJjeDX7NtsE6bcK/QdyKalNsTkxTh9Z7e9XlzwJdBby"
+               "hG924neCDRyUUAyINNUcXMwzvoXmu3LN55t+jTXlA6tg62wNIkvMqkcrHQi9axR5qkRFHrQJJkieBBr+gHs5vNjEdw9V14Y6QpeG"
+               "19C1vgOjvNxUeeF4eO+CpWyDcQsbL19NWz0YVfYI3lNAhPhlRQLD2ceAjz2Tn4r8WeBhwy5HbMxxqYrqF60xxLd6VOzAu2gwdjOq"
+               "YmlBhPtH0mptWYwYeOImQfuQ0egDAh0A/YGC3ie6aTrWakmPZ8cOfa0pZ8O5H0I8jKUZijFI6YIoloNCLLKE71HwQiCXlkmKbmZP"
+               "0O4K7/cPmtEAxeif29F9CdNW9tg+/kAydHwDxx/Q7n/EGAC2/2cgeETH6j4xle3BXblI3iJ0ilU2VFk9zLjK2GjMj6L5yVFhcOIB"
+               "DqOQB8ICKWDpnq1hbQyyUYoYSgYVNNSzyQW0tXq7yGd6XxEazIJ0qR44qQFDv28EaFOhKWbbiJXDYEihTUQj26Dt38Yna7PsvFIc"
+               "G3LvQPDVfqHGLGl+tGMOmcEJ8UI1GNQSuroGTtjLl2+LeToUgG9A2MAMmghxtyE3dkTlgJUrPkzJBz/lvQILVXrIxFgbTp6Y2oyL"
+               "5pas9lpRMEKtBIzB0UW+ILcE13LWxUunQGsX2tRrXxAyLhbaIxhq9y0JUReYi28hRe4KKrff51A6CLFqgoEyCCBK+M8EDe7a/ys2"
+               "grsbx9HKvrkTdYmeUO8tx9rGFZ0thbNz8bGzn42pielWdN3dNrSd2Kr8Le8N/DENIgh9IdpwotQMRFuG+rLHun7gxTy0S989K2Oq"
+               "0qkgVs1L2666/sg40s+RRsoSoHHYsWgKINu5k6iMKIN9SAHRzqfo4yy92YQQeo2KkeF1iLzXIZ5+hMXKJtQ824WqqqEFIKTkFqIw"
+               "hYaguYFGxxnbBPhtF2Aq4oP+su84y4i8PMzKd+UeyeiX2D2KsjY/C1CjaWFRqeILe3iQVoM10XEIiaNo85mHI3U8yjBDTnueS71o"
+               "ADqbfY7DGpdW5K1iYqEHOjyVKL2+elK3LPOvWfY5jM4wAmbPX3bMjp7vafhyltMjWo+i82VywM8hv50/fQpevieBmOly1wNy2qPZ"
+               "CWHeMDQxp5OVGbGndEDqxr01Iflg4MZ8gu1uZjIzq1degVVcIa+UhKr3ODtBTbWJuZ07GzNNsaQhEEBjrd+KYdbE3EySQvjrzOEN"
+               "gZmmfJjB2DknLknAID7MJD03COb0XYY25MbwigZnmsD8wLrLJGB2AiuTgvK7Po6Ddlc+LdHuYHCLnu5IvDGPxhwNakhZm0Beujfy"
+               "Dw8um/DtTsx5WERGlsYFSW/vWe2CJLe+L0oy0xRmq5+LFsG9jhQCf9UNW+z6nscBL2zHTtjbPY6LCfEoNmNBarnt8x5k+4UtpMZm"
+               "CTCmy+Q5N65aQMVNfI9bK1EhwfKf9RKv/IL6YgB3tgGp/xYeOE/xuDHcE7dhb/cTnEXUmGnNZV9lX2dfZjezu9k/WXaHwdPN7LPs"
+               "7/gM41+D2HPlGJWgMbfz+U2tZ9E5+5YY5yHW83hiDtbbgJplG+py7CORy9HpCqhd1YXjTLM/QiWESUqSTOx33S9Bv7uw+jfw95vs"
+               "JstuwOM/QPHP4O+d0Qvq/KdoTE3a1GfZ4rJIcKfM9XdXaBvPss13wHLugapfZ//KPoct/gLV/tk317onxYzucrYxGmGCZb97inkU"
+               "LHYXGxDkcg8ALmxGUqcYvC97CNHqE0jeyvr7pYE2b1kwgArcihq32+jbOGfXR4BLcqHH5IvUsXtSbE4LZzXbMzWj225lnhqzhgFT"
+               "0bpCt3CwRrA1vbHxAg9cRBSm7xlL6YvrBBNf/5PUTQeJ4gvZGZwLUQCJmLUv7+39PbOxy0udqsrnGo3Ggm6m1dTHoJr+XFLL+zk1"
+               "qxO02Oi5/YqLiaNqRwAB1fzVUR9XG7vtqyCN/khQs5vte4pSk33UnyaS2L6CLPSRpRwWBVr5qtS9UItaSbDkT2UafZAV97akaHsn"
+               "6bSyeadDVsOEoSsvoC1TF8eNO9y8xWREE2x/mjnGomPdfzmcsyv2wczldOMGCXUyLd/p7qH1Uq6Xc7M+jaorFQW8dqNxnq960UpY"
+               "hgfd4CIAgEj0kE7QnSkHr4+Vpf2HZ1XiXy37ULqudqbZZCcwu0lWfCjc0ojhAVQDfJZ5nBjDxGOaBRysUV6cYW03XHYTddkxYW4A"
+               "6zXGqZlGg3aXvtiVabr75qTeP3GdV9zihdXwKpewCWTIVZFPmr+UXxKj/kap7fhhf5DWsMCETNWtLbRFmYk3mnF7ZU636FTLzYWW"
+               "zQ1TCLEwWejoIJx0CbNkk2xKSjJnBVu8OABc/8Bm2Mu/whak+JA+pXWq2GRzjGq6t/E+M6vLOeI7u+hZ0oUKA0wllrYSuoZIEhiG"
+               "Y6udb82H7MKULWiNrdoj79SIXU0BsC7trgaTwXCR0RRdhaixPhwO/rJ83I+jCKxDby9POawkBRMpWE35Vorvx7NKw+mRtli2++2u"
+               "G3a4N7+HEXgXdm1sXSzauFCgXC1QvqMpV839O+2m3Qa2urwLVTCSV19FXQuD+eNqlR1hLzV+UdQeOQnmpj0IWwN7ALFn2GRp/GCi"
+               "T1vOQBqe4DB3EA7aJMWr3DBN2YizcW1IXDv6KdwtwWcK7OW1lWexY92khGSn4YdLERxYxr/VWGTHcNPjQTutJ+kqHHPyXyy8eZIF"
+               "EdS1HosgDMvOZvHfXMiPKNSmQj21w0Aw81bPQmalMANWftgBfx7hU8fPnJZttlO0MvgWtbxQzyhs295J2MqO2PSh9Sr+/3+GSJ8R"
+               ,"a9c59ad9b15656fc3c6633acdcedaf9dc6950fa371aa634cedeae00938ffdd8c"),
+          ]
+          from pathlib import Path
+          import base64, hashlib, zlib
+          repo = Path.cwd()
+          public = repo / 'newIDE/app/public'
+          index = public / 'index.html'
+          if not index.is_file():
+              raise SystemExit('This repository is not a full GDevelop fork.')
+          for name, encoded, expected_sha in PAYLOAD:
+              raw = zlib.decompress(base64.b64decode(encoded))
+              actual_sha = hashlib.sha256(raw).hexdigest()
+              if actual_sha != expected_sha:
+                  raise SystemExit('Embedded NOVA payload checksum failed: ' + name)
+              (public / name).write_bytes(raw)
+          html = index.read_text(encoding='utf-8')
+          marker = '<!-- NOVA_STUDIO_MOBILE_PATCH -->'
+          if marker not in html:
+              if '</head>' not in html:
+                  raise SystemExit('Cannot patch GDevelop: missing </head>')
+              injection = ('  ' + marker + '\n'
+                           '  <link rel="stylesheet" href="%PUBLIC_URL%/nova-mobile.css" />\n'
+                           '  <script defer src="%PUBLIC_URL%/nova-mobile.js"></script>\n')
+              html = html.replace('</head>', injection + '</head>', 1)
+          html = html.replace('<title>GDevelop 5</title>', '<title>NOVA Studio — GDevelop fork</title>')
+          index.write_text(html, encoding='utf-8')
+          print('NOVA: successfully patched real GDevelop editor')
+          PY
+      - name: Install real upstream editor dependencies
+        working-directory: newIDE/app
+        env:
+          NODE_OPTIONS: '--max-old-space-size=5120'
+        run: |
+          npm ci --legacy-peer-deps --no-audit --no-fund || \
+          npm install --legacy-peer-deps --no-audit --no-fund
+      - name: Compile GDevelop IDE and local game runtime
+        working-directory: newIDE/app
+        env:
+          NODE_OPTIONS: '--max-old-space-size=5120'
+          CI: 'false'
+          PUBLIC_URL: /${{ github.event.repository.name }}
+        run: npm run build:dev
+      - name: Verify build and create SPA fallback
+        shell: bash
+        run: |
+          test -s newIDE/app/build/index.html
+          test -s newIDE/app/build/nova-mobile.js
+          test -s newIDE/app/build/nova-mobile.css
+          test -d newIDE/app/build/GDJS/Runtime
+          cp newIDE/app/build/index.html newIDE/app/build/404.html
+          touch newIDE/app/build/.nojekyll
+          du -sh newIDE/app/build
+      - name: Upload compiled editor to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: newIDE/app/build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Publish NOVA Studio
+        id: pages
+        uses: actions/deploy-pages@v4
